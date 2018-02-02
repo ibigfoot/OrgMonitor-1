@@ -60,7 +60,7 @@
     },
     "addons": [
       {
-        "plan": "mongolab"
+        "plan": "redis"
       },
       {
         "plan": "heroku-postgresql"

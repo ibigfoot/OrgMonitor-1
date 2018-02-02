@@ -13,9 +13,11 @@ const compare = require('secure-compare')
 const Org = require('../lib/org.js')
 const Crypto = require('../lib/crypto.js')
 const oauth2model = require('../lib/oauth2.js')
-const agenda = require('../lib/agenda.js')
+//const agenda = require('../lib/agenda.js')
 const passport = require('passport')
 const Promise = require('bluebird')
+
+const queue = require('../lib/kue.js')
 
 /* Saml */
 
@@ -33,10 +35,20 @@ router.get('/setup', SAMLauthed, async (req, res) => {
   const db = req.app.get('db')
   /* Create required tables */
   try {
+    /*
     let job = agenda.create('deleteOldRecords', { id: 1 })
     job.unique({ id: 1 }) // guarantees uniqueness
     job.repeatEvery('1 day')
     job.save()
+    */
+
+    var kueJob = queue
+                  .createJob('deleteOldRecords', {msg:'delete the old records'})
+                  .attempts(3)
+                  .backoff(backoff)
+                  .priority('normal')
+
+    queue.every('* * * * *', kueJob)
 
     await db.createDocumentTable('creds')
     await db.createDocumentTable('orgsdata')

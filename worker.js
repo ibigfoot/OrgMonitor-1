@@ -8,6 +8,8 @@
 const agenda = require('./lib/agenda.js')
 const Org = require('./lib/org.js')
 
+const queue = require('./lib/kue.js')
+
 agenda.define('refreshOrg', async (job, done) => {
   const jobData = job.attrs.data
   console.log(`[${jobData.orgId}] Syncing..`)
@@ -29,6 +31,12 @@ function graceful () {
     process.exit(0)
   })
 }
+
+queue.process('deleteOldRecords', function(job, done) {
+  console.log(`We are processing a job ${job}`)
+  done()
+})
+
 
 process.on('SIGTERM', graceful)
 process.on('SIGINT', graceful)

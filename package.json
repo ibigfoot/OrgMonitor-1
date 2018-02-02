@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "BSD-3-Clause",
   "engines": {
-    "node": "8.9.0"
+    "node": "9.4.0"
   },
   "dependencies": {
     "agenda": "1.0.3",
@@ -16,6 +16,8 @@
     "force-ssl-heroku": "1.0.2",
     "helmet": "3.9.0",
     "jsforce": "1.8.0",
+    "kue": "^0.11.6",
+    "kue-scheduler": "^0.7.4",
     "lodash": "4.17.4",
     "massive": "4.4.0",
     "numeral": "2.0.6",

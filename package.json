@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "BSD-3-Clause",
   "engines": {
-    "node": "9.4.0"
+    "node": "8.9.0"
   },
   "dependencies": {
     "bluebird": "3.5.1",

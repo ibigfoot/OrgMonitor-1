@@ -39,6 +39,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
                   .attempts(3)
                   .backoff(backoff)
                   .priority('normal')
+                  .unique('unique_every')
 
     queue.every('* * * * *', kueJob)
 
@@ -100,10 +101,11 @@ router.get('/callback', async (req, res) => {
   try {
 
     let kueJob = scheduler
-      .createJob('refreshOrg', {msg:'this will refresh the org', orgId: env.orgId})
+      .createJob('refreshOrg', {orgId: env.orgId})
       .attempts(3)
       .backoff(backoff)
       .priority('normal')
+      .unique('unique_every')
 
       queue.every('* * * * *', kueJob)
 

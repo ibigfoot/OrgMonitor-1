@@ -13,11 +13,10 @@ const compare = require('secure-compare')
 const Org = require('../lib/org.js')
 const Crypto = require('../lib/crypto.js')
 const oauth2model = require('../lib/oauth2.js')
-//const agenda = require('../lib/agenda.js')
 const passport = require('passport')
 const Promise = require('bluebird')
 
-const queue = require('../lib/kue.js')
+const scheduler = require('../lib/kue.js').scheduler
 
 /* Saml */
 
@@ -35,14 +34,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
   const db = req.app.get('db')
   /* Create required tables */
   try {
-    /*
-    let job = agenda.create('deleteOldRecords', { id: 1 })
-    job.unique({ id: 1 }) // guarantees uniqueness
-    job.repeatEvery('1 day')
-    job.save()
-    */
-
-    var kueJob = queue
+    let kueJob = scheduler
                   .createJob('deleteOldRecords', {msg:'delete the old records'})
                   .attempts(3)
                   .backoff(backoff)
@@ -106,11 +98,15 @@ router.get('/callback', async (req, res) => {
 
   // Schedule data refresh job
   try {
-    let job = agenda.create('refreshOrg', { orgId: env.orgId })
-    job.unique({ orgId: env.orgId }) // guarantees uniqueness
-    job.repeatEvery('1 hour')
-    job.save()
-    console.log(`[${env.orgId}] Successfully scheduled job`)
+
+    let kueJob = scheduler
+      .createJob('refreshOrg', {msg:'this will refresh the org', orgId: env.orgId})
+      .attempts(3)
+      .backoff(backoff)
+      .priority('normal')
+
+      queue.every('* * * * *', kueJob)
+
   } catch (e) {
     console.error(`[${env.orgId}] Error while scheduling job`, e)
     return res.json({ success: false, error: e.message })
@@ -225,10 +221,15 @@ router.post('/reschedule', async (req, res) => {
   try {
     const creds = await Org.getAllCreds()
     creds.map(async cred => {
-      let job = agenda.create('refreshOrg', { orgId: cred.orgId })
-      job.unique({ orgId: cred.orgId }) // guarantees uniqueness
-      job.repeatEvery('1 hour')
-      job.save()
+
+      let kueJob = scheduler
+        .createJob('refreshOrg', {msg:'this will refresh the org', orgId: cred.orgId})
+        .attempts(3)
+        .backoff(backoff)
+        .priority('normal')
+
+      queue.every('* * * * *', kueJob)
+
       console.log(`[${cred.orgId}] Successfully scheduled job`)
     })
     res.send({ success: true })

@@ -4,14 +4,12 @@
   Licensed under the BSD 3-Clause license.
   For full license text, see LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
-
-const agenda = require('./lib/agenda.js')
 const Org = require('./lib/org.js')
 
-const queue = require('./lib/kue.js')
+const queue = require('./lib/kue.js').worker
 
-agenda.define('refreshOrg', async (job, done) => {
-  const jobData = job.attrs.data
+queue.process('refreshOrg', function(job, done) {
+  const jobData = job.data
   console.log(`[${jobData.orgId}] Syncing..`)
   let org = await Org.get(jobData.orgId)
   let data = await org.fetchRemoteData()
@@ -19,7 +17,7 @@ agenda.define('refreshOrg', async (job, done) => {
   done()
 })
 
-agenda.define('deleteOldRecords', async (job, done) => {
+queue.process('deleteOldRecords', function(job, done) {
   console.log(`Deleting old records..`)
   await Org.deleteOldRecords()
   done()
@@ -27,16 +25,11 @@ agenda.define('deleteOldRecords', async (job, done) => {
 
 function graceful () {
   console.log('Shutting down worker')
-  agenda.stop(function () {
-    process.exit(0)
+  queue.shutdown(10000, function(err) {
+    console.log( 'Kue shutdown: ', err||'' );
+    process.exit( 0 );
   })
 }
-
-queue.process('deleteOldRecords', function(job, done) {
-  console.log(`We are processing a job ${job}`)
-  done()
-})
-
 
 process.on('SIGTERM', graceful)
 process.on('SIGINT', graceful)

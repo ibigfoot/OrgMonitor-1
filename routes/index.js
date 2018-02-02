@@ -16,7 +16,7 @@ const oauth2model = require('../lib/oauth2.js')
 const passport = require('passport')
 const Promise = require('bluebird')
 
-const scheduler = require('../lib/kue.js').scheduler
+const scheduler = require('../lib/kue.js')
 
 /* Saml */
 

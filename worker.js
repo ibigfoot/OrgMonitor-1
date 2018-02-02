@@ -5,7 +5,7 @@
   For full license text, see LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
 const Org = require('./lib/org.js')
-const queue = require('./lib/kue.js').worker
+const queue = require('./lib/kue.js')
 
 queue.process('refreshOrg', function(job, done) {
   const jobData = job.data

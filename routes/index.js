@@ -141,6 +141,13 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
   }
 })
 
+
+scheduler.process('testJob', (job, done) => {
+  console.log(`Processing the job ${job}`)
+  done()
+})
+
+
 router.get('/', SAMLauthed, (req, res) => {
   res.redirect('/get')
 })

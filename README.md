@@ -2,6 +2,8 @@
 
 OrgMonitor is a Salesforce Connected App written in Node.js used to gather the stats necessary to evaluate the basic security posture of a wide portfolio of Salesforce Orgs. It runs a set of SOQL queries against all connected Orgs on an hourly basis: it answers questions like "how many users/profiles/permsets/roles/classes do we have?", gives you visibility of users with high-level privileges (VAD, MAD, AuthorApex, etc), and surfaces Health Check score and risks — all from a central location.
 
+This version is a fork that has been modified to work using a Redis backed scheduler [kue-scheduler](https://www.npmjs.com/package/kue-scheduler) instead of the MongoDB backed [agenda](https://www.npmjs.com/package/agenda) used in the [original](https://github.com/forcedotcom/OrgMonitor)
+ 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -12,11 +14,22 @@ The application requires:
 
 - Node.js
 - Yarn
-- MongoDB
+- Redis
 - PostgreSQL
 - One or more Salesforce Orgs (production or sandbox)
 
 ### Installing locally
+So, I will be honest and say that I haven't really validated this to work locally as I just built it all straight to Heroku. It probably will work, but your mileage might vary. There is a dependency in here that doesn't like Node 9.4.0 that I didn't bother chasing down ... I have to confess that NodeJS isn't really my thing... 
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+If you use this there is a bit of a small step you will need to do to config the Redis instance correctly, once it has been installed in your Heroku application. It will require using the redis-cli (install redis and you will get this)
+
+```
+> redis-cli -u <<REDISCLOUD_URL string here>> config set notify-keyspace-events Ex
+```
+
+If you are running locally, you can execute this config command just without the -u option.
 
 #### Create a Connected App
 
@@ -32,7 +45,7 @@ The application requires:
   - `PORT` is the port the web application will run on, defaults to 3000
   - `NODE_ENV` set to `development` allows the application to bypass the built-in SAML SSO auth
   - `DATABASE_URL` is a connection string pointing to your PostgresSQL database
-  - `MONGODB_URI` is a connection string pointing to your MongoDB database
+  - `REDISCLOUD_URL` is a connection string pointing to your Redis database. We target Redis Cloud Heroku Addon as it allows the necessary configuration for scheduling jobs.
   - `CLIENT_ID` is the newly created Connected App's `Consumer Key` value
   - `CLIENT_SECRET` is the newly created Connected App's `Consumer Secret` value
   - `REDIRECT_URI` is the newly created Connected App's `Callback URL` value
@@ -54,8 +67,6 @@ The application requires:
 ### Deployment
 
 When ready for production deployment:
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 1. Edit the Connected App and include the new hostname to the `Callback URL` value
 2. Update the application's `REDIRECT_URI` value to match the `Callback URL` 

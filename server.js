@@ -12,6 +12,7 @@ const forcetls = require('force-ssl-heroku')
 const compression = require('compression')
 const passport = require('passport')
 const session = require('express-session')
+const RedisStore = require('connect-redis')(session)
 const bodyparser = require('body-parser')
 const routes = require('./routes/index.js')
 const db = require('./lib/db.js')
@@ -30,6 +31,7 @@ app.use(bodyparser.json()) // for parsing application/json
 app.use(bodyparser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 app.use(session({
   name: 'sid',
+  store: new RedisStore({url: process.env.REDISCLOUD_URL+'?ssl=true'}), 
   secret: process.env.COOKIE_SECRET || 'change me',
   proxy: true,
   resave: true,

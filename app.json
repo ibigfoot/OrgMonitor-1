@@ -60,7 +60,7 @@
     },
     "addons": [
       {
-        "plan": "redis"
+        "plan": "rediscloud"
       },
       {
         "plan": "heroku-postgresql"

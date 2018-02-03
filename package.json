@@ -9,6 +9,7 @@
     "bluebird": "3.5.1",
     "body-parser": "1.18.2",
     "compression": "1.7.1",
+    "connect-redis": "^3.3.3",
     "deasync": "0.1.10",
     "express": "4.16.2",
     "express-session": "1.15.6",

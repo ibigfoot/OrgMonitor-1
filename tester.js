@@ -10,7 +10,3 @@ var job = q.createJob('anotherTest', {data: 'here is  some data'})
             .priority('normal');
         
 q.every('10 seconds', job);
-
-q.process('testJob', function(job, done) {
-    console.log('processing the job');
-});

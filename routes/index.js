@@ -127,11 +127,11 @@ router.get('/callback', async (req, res) => {
 
 router.get('/test/:name', SAMLauthed, (req, res) => {
   const name = req.params.name
-  console.log(`We are testing scheduling job ${testName}`)
+  console.log(`We are testing scheduling job ${name}`)
 
   try {
     let kueJob = scheduler 
-              .createJob('testJob', {msg: `new job named ${testName}`})
+              .createJob('testJob', {msg: `new job named ${name}`})
               .attempts(3)
               .backoff(true)
               .priority('normal')

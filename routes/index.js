@@ -139,6 +139,11 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
 
     scheduler.every('* * * * *', kueJob)
 
+    scheduler.process('testJob', (job, done) => {
+      console.log(`processing the testJob ${job}`)
+      done()
+    })
+    
     return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
 
   } catch (e) {
@@ -148,10 +153,7 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
 })
 
 
-scheduler.process('testJob', (job, done) => {
-  console.log(`processing the testJob ${job}`)
-  done()
-})
+
 
 
 

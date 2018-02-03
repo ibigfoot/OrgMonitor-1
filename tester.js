@@ -4,7 +4,7 @@ var q = kue.createQueue({
     redis: process.env.REDISCLOUD_URL
 });
 
-var job = q.createJob('testJob', {data: 'here is  some data'})
+var job = q.createJob('anotherTest', {data: 'here is  some data'})
             .attempts(3)
             .backoff(true)
             .priority('normal');

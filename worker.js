@@ -9,10 +9,13 @@ const queue = require('./lib/kue.js')
 
 queue.process('refreshOrg', function(job, done) {
   const jobData = job.data
-  
+  console.log(JSON.stringify(jobData))
+  /* 
+  console.log(`[${jobData.orgId}] Syncing..`)
   let org = await Org.get(jobData.orgId)
   let data = await org.fetchRemoteData()
   await Org.saveData(data)
+  */
   done()
 })
 

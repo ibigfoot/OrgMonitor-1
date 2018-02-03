@@ -107,7 +107,7 @@ router.get('/callback', async (req, res) => {
       .priority('normal')
       .unique('unique_every')
 
-      queue.every('* * * * *', kueJob)
+      scheduler.every('* * * * *', kueJob)
 
   } catch (e) {
     console.error(`[${env.orgId}] Error while scheduling job`, e)
@@ -230,7 +230,7 @@ router.post('/reschedule', async (req, res) => {
         .backoff(true)
         .priority('normal')
 
-      queue.every('* * * * *', kueJob)
+      scheduler.every('* * * * *', kueJob)
 
       console.log(`[${cred.orgId}] Successfully scheduled job`)
     })

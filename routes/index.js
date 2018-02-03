@@ -37,7 +37,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
     let kueJob = scheduler
                   .createJob('deleteOldRecords', {msg:'delete the old records'})
                   .attempts(3)
-                  .backoff(backoff)
+                  .backoff(true)
                   .priority('normal')
                   .unique('unique_every')
 
@@ -103,7 +103,7 @@ router.get('/callback', async (req, res) => {
     let kueJob = scheduler
       .createJob('refreshOrg', {orgId: env.orgId})
       .attempts(3)
-      .backoff(backoff)
+      .backoff(true)
       .priority('normal')
       .unique('unique_every')
 
@@ -227,7 +227,7 @@ router.post('/reschedule', async (req, res) => {
       let kueJob = scheduler
         .createJob('refreshOrg', {msg:'this will refresh the org', orgId: cred.orgId})
         .attempts(3)
-        .backoff(backoff)
+        .backoff(true)
         .priority('normal')
 
       queue.every('* * * * *', kueJob)

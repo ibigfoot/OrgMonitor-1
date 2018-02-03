@@ -16,7 +16,8 @@ const oauth2model = require('../lib/oauth2.js')
 const passport = require('passport')
 const Promise = require('bluebird')
 
-const scheduler = require('../lib/kue.js')
+const Kue = require('../lib/kue.js')
+const scheduler = Kue.scheduler
 
 /* Saml */
 
@@ -139,11 +140,6 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
 
     scheduler.every('* * * * *', kueJob)
 
-    scheduler.process('testJob', (job, done) => {
-      console.log(`processing the testJob ${job}`)
-      done()
-    })
-    
     return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
 
   } catch (e) {

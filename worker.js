@@ -5,7 +5,8 @@
   For full license text, see LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
 */
 const Org = require('./lib/org.js')
-const queue = require('./lib/kue.js')
+const Kue = require('./lib/kue.js').queue
+const queue = Kue.queue
 
 queue.process('testJob', (job, done) => {
 

@@ -7,7 +7,7 @@ var q = kue.createQueue({
 var job = q.createJob('testJob', {data: 'here is  some data'})
             .attempts(3)
             .backoff(true)
-            .priority(normal);
+            .priority('normal');
         
 q.every('10 seconds', job);
 

@@ -41,7 +41,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
                   .priority('normal')
                   .unique('unique_every')
 
-    queue.every('* * * * *', kueJob)
+    scheduler.every('* * * * *', kueJob)
 
     await db.createDocumentTable('creds')
     await db.createDocumentTable('orgsdata')

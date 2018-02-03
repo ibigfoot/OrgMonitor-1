@@ -42,7 +42,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
                   .priority('normal')
                   .unique('unique_every')
     console.log('~~ attempting to schedule deleteOldRecords job')
-    scheduler.every('* * * * *', kueJob)
+    scheduler.every('* * * * * *', kueJob)
 
     await db.createDocumentTable('creds')
     await db.createDocumentTable('orgsdata')
@@ -101,6 +101,8 @@ router.get('/callback', async (req, res) => {
   // Schedule data refresh job
   try {
 
+    console.log('Attempting to schedule the refreshOrg job')
+
     let kueJob = scheduler
       .createJob('refreshOrg', {orgId: env.orgId, timezone: 'Australia/Sydney'})
       .attempts(3)
@@ -108,7 +110,7 @@ router.get('/callback', async (req, res) => {
       .priority('normal')
       .unique('unique_every')
 
-      scheduler.every('* * * * * *', kueJob)
+      scheduler.every('two minutes', kueJob)
 
   } catch (e) {
     console.error(`[${env.orgId}] Error while scheduling job`, e)

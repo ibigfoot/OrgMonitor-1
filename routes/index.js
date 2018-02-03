@@ -119,6 +119,12 @@ router.get('/callback', async (req, res) => {
 
 /* Other routes */
 
+
+
+
+
+
+
 router.get('/test/:name', SAMLauthed, (req, res) => {
   const name = req.params.name
   console.log(`We are testing scheduling job ${name}`)
@@ -132,11 +138,6 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
               .unique('unique_every')
 
     scheduler.every('* * * * *', kueJob)
-
-    scheduler.process('testJob', (job, done) => {
-      console.log(`Processing the job ${job}`)
-      done()
-    })
 
     return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
 

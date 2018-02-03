@@ -102,13 +102,13 @@ router.get('/callback', async (req, res) => {
   try {
 
     let kueJob = scheduler
-      .createJob('refreshOrg', {orgId: env.orgId})
+      .createJob('refreshOrg', {orgId: env.orgId, timezone: 'Australia/Sydney'})
       .attempts(3)
       .backoff(true)
       .priority('normal')
       .unique('unique_every')
 
-      scheduler.every('* * * * *', kueJob)
+      scheduler.every('* * * * * *', kueJob)
 
   } catch (e) {
     console.error(`[${env.orgId}] Error while scheduling job`, e)

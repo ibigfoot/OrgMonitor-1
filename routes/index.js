@@ -119,6 +119,24 @@ router.get('/callback', async (req, res) => {
 
 /* Other routes */
 
+router.get('/test/:name', SAMLauthed, (req, res) => {
+  console.log(`We are testing scheduling job ${name}`)
+
+  try {
+    let kueJob = scheduler 
+              .createJob('testJob', {msg: `new job named ${name}`})
+              .attempts(3)
+              .backoff(true)
+              .priority('normal')
+              .unique('unique_every')
+
+    scheduler.every('* * * * *', kueJob)
+  } catch (e) {
+    console.error(`${e.message}`)
+    return res.json({success:false, error: e.message})
+  }
+})
+
 router.get('/', SAMLauthed, (req, res) => {
   res.redirect('/get')
 })

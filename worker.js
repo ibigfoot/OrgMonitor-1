@@ -7,6 +7,13 @@
 const Org = require('./lib/org.js')
 const queue = require('./lib/kue.js')
 
+queue.process('testJob', (job, done) => {
+
+  console.log(`processing testJob ${job}`)
+  done()
+})
+
+
 queue.process('refreshOrg', async (job, done) => {
   const jobData = job.data
   console.log(JSON.stringify(jobData))

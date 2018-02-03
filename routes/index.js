@@ -40,7 +40,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
                   .backoff(true)
                   .priority('normal')
                   .unique('unique_every')
-
+    console.log('~~ attempting to schedule deleteOldRecords job')
     scheduler.every('* * * * *', kueJob)
 
     await db.createDocumentTable('creds')

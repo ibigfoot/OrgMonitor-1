@@ -126,7 +126,7 @@ router.get('/callback', async (req, res) => {
 
 
 router.get('/test/:testName', SAMLauthed, (req, res) => {
-  const name = req.params.testName
+
   console.log(`We are testing scheduling job ${testName}`)
   /*
   try {
@@ -146,7 +146,7 @@ router.get('/test/:testName', SAMLauthed, (req, res) => {
     return res.json({success:false, error: e.message})
   }
   */
-  return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
+  return res.json({success: true, msg: `Successfully created the job ${testName}`})
 })
 
 

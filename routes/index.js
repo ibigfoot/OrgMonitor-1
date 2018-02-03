@@ -132,7 +132,7 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
 
   try {
     let kueJob = scheduler 
-              .createJob('testJob', {msg: `new job named ${name}`})
+              .createJob('testJob', {data: 'here is  some data'})
               .attempts(3)
               .backoff(true)
               .priority('normal')

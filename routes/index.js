@@ -138,7 +138,7 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
               .priority('normal')
               .unique('unique_every')
 
-    await scheduler.every('10 seconds', kueJob)
+    scheduler.every('10 seconds', kueJob)
 
     return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
 

@@ -125,10 +125,10 @@ router.get('/callback', async (req, res) => {
 
 
 
-router.get('/test/:testName', SAMLauthed, (req, res) => {
-
+router.get('/test/:name', SAMLauthed, (req, res) => {
+  const name = req.params.name
   console.log(`We are testing scheduling job ${testName}`)
-  /*
+
   try {
     let kueJob = scheduler 
               .createJob('testJob', {msg: `new job named ${testName}`})
@@ -145,8 +145,12 @@ router.get('/test/:testName', SAMLauthed, (req, res) => {
     console.error(`${e.message}`)
     return res.json({success:false, error: e.message})
   }
-  */
-  return res.json({success: true, msg: `Successfully created the job ${testName}`})
+})
+
+
+scheduler.process('testJob', (job, done) => {
+  console.log(`processing the testJob ${job}`)
+  done()
 })
 
 

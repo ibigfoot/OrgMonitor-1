@@ -131,6 +131,9 @@ router.get('/test/:name', SAMLauthed, (req, res) => {
               .unique('unique_every')
 
     scheduler.every('* * * * *', kueJob)
+
+    return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
+
   } catch (e) {
     console.error(`${e.message}`)
     return res.json({success:false, error: e.message})

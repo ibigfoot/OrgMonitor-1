@@ -42,7 +42,7 @@ router.get('/setup', SAMLauthed, async (req, res) => {
                   .priority('normal')
                   .unique('unique_every')
     console.log('~~ attempting to schedule deleteOldRecords job')
-    scheduler.every('* * * * * *', kueJob)
+    scheduler.every('every day', kueJob)
 
     await db.createDocumentTable('creds')
     await db.createDocumentTable('orgsdata')
@@ -110,7 +110,7 @@ router.get('/callback', async (req, res) => {
       .priority('normal')
       .unique('unique_every')
 
-      scheduler.every('two minutes', kueJob)
+      scheduler.every('every hour', kueJob)
 
   } catch (e) {
     console.error(`[${env.orgId}] Error while scheduling job`, e)
@@ -121,41 +121,6 @@ router.get('/callback', async (req, res) => {
 })
 
 /* Other routes */
-
-
-
-
-
-
-
-router.get('/test/:name', SAMLauthed, (req, res) => {
-  const name = req.params.name
-  console.log(`We are testing scheduling job ${name}`)
-
-  try {
-    let kueJob = scheduler 
-              .createJob('testJob', {data: 'here is  some data'})
-              .attempts(3)
-              .backoff(true)
-              .priority('normal')
-              .unique('unique_every')
-
-    scheduler.every('10 seconds', kueJob)
-
-    return res.json({success: true, msg: `Successfully created the job ${kueJob}`})
-
-  } catch (e) {
-    console.error(`${e.message}`)
-    return res.json({success:false, error: e.message})
-  }
-})
-
-
-
-
-
-
-
 
 router.get('/', SAMLauthed, (req, res) => {
   res.redirect('/get')
@@ -268,7 +233,7 @@ router.post('/reschedule', async (req, res) => {
         .backoff(true)
         .priority('normal')
 
-      scheduler.every('* * * * *', kueJob)
+      scheduler.every('every hour', kueJob)
 
       console.log(`[${cred.orgId}] Successfully scheduled job`)
     })

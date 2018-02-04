@@ -104,7 +104,7 @@ router.get('/callback', async (req, res) => {
     console.log('Attempting to schedule the refreshOrg job')
 
     let kueJob = scheduler
-      .createJob('refreshOrg', {orgId: env.orgId, timezone: 'Australia/Sydney'})
+      .createJob('refreshOrg'+env.orgId, {orgId: env.orgId, timezone: 'Australia/Sydney'})
       .attempts(3)
       .backoff(true)
       .priority('normal')

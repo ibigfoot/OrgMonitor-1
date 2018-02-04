@@ -110,6 +110,7 @@ router.get('/callback', async (req, res) => {
       .priority('normal')
       .unique('unique_every')
 
+      scheduler.now(kueJob) // run it now then every hour
       scheduler.every('every hour', kueJob)
 
   } catch (e) {
@@ -233,6 +234,7 @@ router.post('/reschedule', async (req, res) => {
         .backoff(true)
         .priority('normal')
 
+      scheduler.now(kueJob) // run it now then every hour
       scheduler.every('every hour', kueJob)
 
       console.log(`[${cred.orgId}] Successfully scheduled job`)

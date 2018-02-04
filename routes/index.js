@@ -101,17 +101,15 @@ router.get('/callback', async (req, res) => {
   // Schedule data refresh job
   try {
 
-    console.log('Attempting to schedule the refreshOrg job')
-
     let kueJob = scheduler
-      .createJob('refreshOrg'+env.orgId, {orgId: env.orgId, timezone: 'Australia/Sydney'})
+      .createJob('refreshOrg', {orgId: env.orgId})
       .attempts(3)
       .backoff(true)
       .priority('normal')
       .unique('unique_every')
 
       scheduler.now(kueJob) // run it now then every hour
-      scheduler.every('every hour', kueJob)
+      scheduler.every('1 hours', kueJob)
 
   } catch (e) {
     console.error(`[${env.orgId}] Error while scheduling job`, e)
@@ -235,7 +233,7 @@ router.post('/reschedule', async (req, res) => {
         .priority('normal')
 
       scheduler.now(kueJob) // run it now then every hour
-      scheduler.every('every hour', kueJob)
+      scheduler.every('1 hours', kueJob)
 
       console.log(`[${cred.orgId}] Successfully scheduled job`)
     })

@@ -221,6 +221,7 @@ router.post('/refresh', async(req, res) => {
 
 router.post('/reschedule', async (req, res) => {
   const adminToken = req.get('Admin-Token')
+  console.log(`we have an admin token ${adminToken}`)
   if (!compare(adminToken, process.env.ADMIN_TOKEN)) return res.json({ success: false, err: 'Invalid token' })
   try {
     const creds = await Org.getAllCreds()

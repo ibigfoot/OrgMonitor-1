@@ -209,6 +209,7 @@ router.post('/edit/:orgId', async (req, res) => {
 
 router.post('/refresh', async(req, res) => {
   const adminToken = req.get('Admin-Token')
+  console.log(`we have an admin token ${adminToken}`)
   if (!compare(adminToken, process.env.ADMIN_TOKEN)) return res.json({ success: false, err: 'Invalid token' })
   const creds = await Org.getAllCreds()
   creds.map(async cred => {
